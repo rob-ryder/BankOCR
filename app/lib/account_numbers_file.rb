@@ -1,5 +1,0 @@
-class AccountNumbersFile < File
-  
-  
-  
-end
