@@ -58,9 +58,9 @@ class AccountNumberInterpreter
     #define new line string
     interpreted_line = ''
     
-    #calc actual number for each led number signature (top line symbols + mid line symbols + bottom line symbols)
-    line.each do |led_signature|
-      interpreted_line << identify_led_signature(led_signature).to_s
+    #calc actual number for each lcd number signature (top line symbols + mid line symbols + bottom line symbols)
+    line.each do |lcd_signature|
+      interpreted_line << identify_lcd_signature(lcd_signature).to_s
     end
     
     #return interpreted line string
@@ -68,11 +68,11 @@ class AccountNumberInterpreter
     
   end
   
-  def identify_led_signature(signature)
+  def identify_lcd_signature(signature)
     fetch_signature_map.each do |actual,test_signature|
       return actual if signature==test_signature
     end
-    raise "Could not identify led signature, file may not be valid."
+    raise "Could not identify lcd signature, file may not be valid."
   end
   
   def fetch_signature_map 

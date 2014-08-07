@@ -64,7 +64,7 @@ class LcdNum
     self.class.signature_map.each do |sig,map_num|
       @signature=sig if init_num==map_num
     end
-    raise "Invalid fixnum, no signature matched" if @signature==nil
+    raise 'Invalid fixnum, no signature matched' if @signature==nil
   end
   
   def initialize_from_hash(hash)
@@ -72,7 +72,7 @@ class LcdNum
     if self.class.signature_map.has_key?(expected_sig)
       @signature = expected_sig
     else
-      raise "Invalid hash, no signature matched"
+      raise 'Invalid hash, no signature matched'
     end
   end
   
