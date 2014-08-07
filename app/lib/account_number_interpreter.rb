@@ -75,7 +75,7 @@ class AccountNumberInterpreter
     raise "Could not identify led signature, file may not be valid."
   end
   
-  def fetch_signature_map
+  def fetch_signature_map 
     {
         0 => ' _ | ||_|',
         1 => '     |  |',
