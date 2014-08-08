@@ -1,13 +1,13 @@
-describe LcdNumSet do
+describe LcdNumRow do
 
   
-  valid_test_set_string = '123456789'
-  valid_test_set_hash = {
+  valid_row_string = '123456789'
+  valid_row_hash = {
       :top    => '    _  _     _  _  _  _  _ ',
       :middle => '  | _| _||_||_ |_   ||_||_|',
       :bottom => '  ||_  _|  | _||_|  ||_| _|'
   }
-  valid_test_num_hash_array = [
+  valid_array_of_num_hashes = [
       {
           :top    => '   ',
           :middle => '  |',
@@ -66,8 +66,8 @@ describe LcdNumSet do
       expect(described_class.valid_hash?({:invalid=>'format'})).to be false
     end
 
-    it 'returns true when given a hash of @valid_test_set_hash' do
-      expect(described_class.valid_hash?(valid_test_set_hash)).to be true
+    it 'returns true when given a hash of @valid_row_hash' do
+      expect(described_class.valid_hash?(valid_row_hash)).to be true
     end
 
   end
@@ -83,19 +83,19 @@ describe LcdNumSet do
       expect(described_class.valid_string?('invalid format')).to be false
     end
 
-    it 'returns true when given a string of @valid_test_set_string' do
-      expect(described_class.valid_string?(valid_test_set_string)).to be true
+    it 'returns true when given a string of @valid_row_string' do
+      expect(described_class.valid_string?(valid_row_string)).to be true
     end
 
   end
 
 
-  describe '.split_set_hash_into_num_hashes' do
+  describe '.split_row_hash_into_num_hashes' do
     
-    it 'returns array of @valid_test_num_hash_array when given hash of @valid_test_set_hash' do
-      return_val = described_class.split_set_hash_into_num_hashes(valid_test_set_hash)
+    it 'returns array of @valid_array_of_num_hashes when given hash of @valid_row_hash' do
+      return_val = described_class.split_row_hash_into_num_hashes(valid_row_hash)
       expect(return_val).to be_an_instance_of(Array)
-      expect(return_val).to eql(valid_test_num_hash_array)
+      expect(return_val).to eql(valid_array_of_num_hashes)
     end
     
   end
@@ -115,43 +115,43 @@ describe LcdNumSet do
       expect{described_class.new('invalid format')}.to raise_error
     end
 
-    it "returns a #{described_class} object when given a hash of @valid_test_set_hash" do
-      expect(described_class.new(valid_test_set_hash)).to be_an_instance_of(described_class)
+    it "returns a #{described_class} object when given a hash of @valid_row_hash" do
+      expect(described_class.new(valid_row_hash)).to be_an_instance_of(described_class)
     end
 
-    it "returns a #{described_class} object when given a string of @valid_test_set_string" do
-      expect(described_class.new(valid_test_set_string)).to be_an_instance_of(described_class)
+    it "returns a #{described_class} object when given a string of @valid_row_string" do
+      expect(described_class.new(valid_row_string)).to be_an_instance_of(described_class)
     end
 
   end
 
   
-  shared_examples "a lcd_num_set converter" do
+  shared_examples 'a lcd_num_row converter' do
     describe '#to_s' do
-      it 'returns a string of value @valid_test_set_string' do
+      it 'returns a string of value @valid_row_string' do
         return_val = obj.to_s
         expect(return_val).to be_an_instance_of(String)
-        expect(return_val).to eql(valid_test_set_string)
+        expect(return_val).to eql(valid_row_string)
       end
     end
     describe '#to_arr' do
-      it 'returns an array of value @valid_test_num_hash_array' do
+      it 'returns an array of value @valid_array_of_num_hashes' do
         return_val = obj.to_arr
         expect(return_val).to be_an_instance_of(Array)
-        expect(return_val).to eql(valid_test_num_hash_array)
+        expect(return_val).to eql(valid_array_of_num_hashes)
       end
     end
   end
 
-  context 'an object initialized with a hash of @valid_test_set_hash' do
-    it_behaves_like 'a lcd_num_set converter' do
-       let(:obj){described_class.new(valid_test_set_hash)} 
+  context 'an object initialized with a hash of @valid_row_hash' do
+    it_behaves_like 'a lcd_num_row converter' do
+       let(:obj){described_class.new(valid_row_hash)} 
     end
   end
 
-  context 'an object initialized with a hash of @valid_test_set_string' do
-    it_behaves_like 'a lcd_num_set converter' do
-      let(:obj){described_class.new(valid_test_set_string)}
+  context 'an object initialized with a string of @valid_row_string' do
+    it_behaves_like 'a lcd_num_row converter' do
+      let(:obj){described_class.new(valid_row_string)}
     end
   end
 

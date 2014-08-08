@@ -1,4 +1,4 @@
-class LcdNumSet
+class LcdNumRow
 
   def self.valid_hash?(hash)
     return false unless (hash.is_a?(Hash) && hash.keys==[:top,:middle,:bottom])
@@ -13,11 +13,11 @@ class LcdNumSet
     return true
   end
 
-  def self.split_set_hash_into_num_hashes(set_hash)
+  def self.split_row_hash_into_num_hashes(row_hash)
     num_hashes = []
-    set_hash.each do |line_pos,line_content|
+    row_hash.each do |line_pos,line_content|
       num_parts = line_content.scan(/[ |_]{3}/)
-      raise "Invalid count of number parts for line #{line_pos} in set_hash" unless num_parts.length==9
+      raise "Invalid count of number parts for line #{line_pos} in row_hash" unless num_parts.length==9
       9.times do |i|
         num_hashes[i] = {} if num_hashes[i]==nil
         num_hashes[i][line_pos] = num_parts[i]
@@ -26,13 +26,13 @@ class LcdNumSet
     return num_hashes
   end
   
-  def initialize(numset,lcdNumClass=LcdNum)
-    if self.class.valid_hash?(numset) then
-      initialize_from_hash(numset,lcdNumClass)
-    elsif self.class.valid_string?(numset) then
-      initialize_from_string(numset,lcdNumClass)
+  def initialize(num_row,lcdNumClass=LcdNum)
+    if self.class.valid_hash?(num_row) then
+      initialize_from_hash(num_row,lcdNumClass)
+    elsif self.class.valid_string?(num_row) then
+      initialize_from_string(num_row,lcdNumClass)
     else
-      raise 'numset must be a string or hash of valid format'
+      raise 'num_row must be a string or hash of valid format'
     end
   end
   
@@ -62,7 +62,7 @@ class LcdNumSet
   end
   
   def initialize_from_hash(hash, lcdNumClass)
-    num_hashes = self.class.split_set_hash_into_num_hashes(hash)
+    num_hashes = self.class.split_row_hash_into_num_hashes(hash)
     @lcdnums = []
     num_hashes.each do |num_hash|
       @lcdnums << lcdNumClass.new(num_hash)

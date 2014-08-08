@@ -80,4 +80,4 @@ end
 #include classes
 require_relative '../lib/account_number_interpreter'
 require_relative '../lib/lcd_num'
-require_relative '../lib/lcd_num_set'
+require_relative '../lib/lcd_num_row'
