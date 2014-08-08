@@ -1,14 +1,10 @@
-#include resources
-require_relative 'lib/account_number_interpreter'
-
-#set base directory for project
 require 'Pathname'
-BASEDIR = Pathname.new(__FILE__).dirname.to_s
 
-#interpret the file
-interpreter = AccountNumberInterpreter.new
-file = File.new(BASEDIR+'/scans/example1.txt')
-interpreted_file = interpreter.interpret_file(file)
+require_relative 'constants'
+require_relative 'lib/lcd_num_file'
 
-#output the result
-puts interpreted_file
+raw_file_path = BASEDIR+'/scans/example1.txt'
+raw_file = File.new(raw_file_path)
+lcd_num_file = LcdNumFile.new(raw_file)
+
+puts lcd_num_file.convert

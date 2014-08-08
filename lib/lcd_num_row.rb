@@ -1,3 +1,5 @@
+require_relative 'lcd_num'
+
 class LcdNumRow
 
   #---class_methods---

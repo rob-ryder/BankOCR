@@ -79,7 +79,4 @@ end
 
 #include classes
 require_relative '../constants'
-require_relative '../lib/account_number_interpreter'
-require_relative '../lib/lcd_num'
-require_relative '../lib/lcd_num_row'
 require_relative '../lib/lcd_num_file'
