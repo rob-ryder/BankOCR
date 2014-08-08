@@ -1,5 +1,7 @@
 class LcdNumRow
 
+  #---class_methods---
+  
   def self.valid_hash?(hash)
     return false unless (hash.is_a?(Hash) && hash.keys==[:top,:middle,:bottom])
     hash.each_value do |value|
@@ -25,6 +27,8 @@ class LcdNumRow
     end
     return num_hashes
   end
+
+  #---object_methods---
   
   def initialize(num_row,lcdNumClass=LcdNum)
     if self.class.valid_hash?(num_row) then
@@ -67,6 +71,8 @@ class LcdNumRow
   end
   
   private
+
+  #---private_object_methods---
   
   def initialize_from_string(string, lcdNumClass)
     @lcdnums = []
