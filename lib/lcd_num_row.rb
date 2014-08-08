@@ -72,6 +72,16 @@ class LcdNumRow
     return hash
   end
   
+  def is_valid_account_num?
+    
+    checksum = 0
+    @lcdnums.each do |lcdnum|
+      checksum += lcdnum.to_fixnum
+    end
+    return (checksum.modulo(11)==0)
+    
+  end
+  
   private
 
   #---private_object_methods---

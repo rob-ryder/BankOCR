@@ -124,7 +124,27 @@ describe LcdNumRow do
     end
 
   end
+  
+  
+  describe '#is_valid_account_num?' do
 
+    it 'returns false for object initialized with "910000000" (sum of digits is NOT multiple of 11)' do
+      obj = described_class.new('910000000')
+      expect(obj.is_valid_account_num?).to be false
+    end
+
+    it 'returns true for object initialized with "920000000" (sum of digits IS multiple of 11)' do
+      obj = described_class.new('920000000')
+      expect(obj.is_valid_account_num?).to be true
+    end
+
+    it 'returns false for object initialized with "930000000" (sum of digits is NOT multiple of 11)' do
+      obj = described_class.new('930000000')
+      expect(obj.is_valid_account_num?).to be false
+    end
+
+  end
+  
   
   shared_examples 'a lcd_num_row converter' do
     describe '#to_s' do
