@@ -141,6 +141,13 @@ describe LcdNumRow do
         expect(return_val).to eql(valid_array_of_num_hashes)
       end
     end
+    describe '#to_hash' do
+      it 'returns a hash of value @valid_row_hash' do
+        return_val = obj.to_hash
+        expect(return_val).to be_an_instance_of(Hash)
+        expect(return_val).to eql(valid_row_hash)
+      end
+    end
   end
 
   context 'an object initialized with a hash of @valid_row_hash' do

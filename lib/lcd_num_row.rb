@@ -52,6 +52,20 @@ class LcdNumRow
     return arr
   end
   
+  def to_hash
+    hash = {
+      :top    => '',
+      :middle => '',
+      :bottom => ''
+    }
+    @lcdnums.each do |lcdnum|
+      hash[:top]    << lcdnum.to_hash[:top]
+      hash[:middle] << lcdnum.to_hash[:middle]
+      hash[:bottom] << lcdnum.to_hash[:bottom]
+    end
+    return hash
+  end
+  
   private
   
   def initialize_from_string(string, lcdNumClass)
