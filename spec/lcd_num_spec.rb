@@ -8,6 +8,11 @@ describe LcdNum do
       :middle => '| |',
       :bottom => '|_|'
   }
+  valid_broken_hash   = {
+      :top    => '   ',
+      :middle => '| |',
+      :bottom => '|_|'
+  }
   
   
   describe '.valid_fixnum?' do
@@ -40,6 +45,10 @@ describe LcdNum do
     it "returns true for hash of #{valid_test_hash}" do
       expect(described_class.valid_hash?(valid_test_hash)).to be true
     end
+
+    it 'returns true for hash of @valid_broken_hash' do
+      expect(described_class.valid_hash?(valid_broken_hash)).to be true
+    end
     
   end
 
@@ -52,6 +61,10 @@ describe LcdNum do
 
     it "returns #{described_class} object when given a hash of #{valid_test_hash}" do
       expect(described_class.new(valid_test_hash)).to be_an_instance_of(described_class)
+    end
+
+    it "returns #{described_class} object when given a hash of @valid_broken_hash" do
+      expect(described_class.new(valid_broken_hash)).to be_an_instance_of(described_class)
     end
 
     it "returns #{described_class} object when given a fixnum of #{valid_test_fixnum}" do
@@ -83,6 +96,11 @@ describe LcdNum do
       instance = described_class.new(valid_test_fixnum)
       expect(instance.to_fixnum).to eql(valid_test_fixnum)
     end
+
+    it 'returns -1 when sent to an object initialized with @valid_broken_hash' do
+      instance = described_class.new(valid_broken_hash)
+      expect(instance.to_fixnum).to eql(-1)
+    end
     
   end
   
@@ -96,6 +114,11 @@ describe LcdNum do
     it "returns #{valid_test_hash} when sent to an object initialized with #{valid_test_hash}" do
       instance = described_class.new(valid_test_hash)
       expect(instance.to_hash).to eql(valid_test_hash)
+    end
+
+    it 'returns @valid_broken_hash when sent to an object initialized with @valid_broken_hash' do
+      instance = described_class.new(valid_broken_hash)
+      expect(instance.to_hash).to eql(valid_broken_hash)
     end
 
   end

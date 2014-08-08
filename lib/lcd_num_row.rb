@@ -45,7 +45,12 @@ class LcdNumRow
   def to_s
     str = ''
     @lcdnums.each do |lcdnum|
-      str << lcdnum.to_fixnum.to_s
+      fixnum = lcdnum.to_fixnum
+      if fixnum < 0 then
+        str << '?'
+      else
+        str << fixnum.to_s
+      end
     end
     return str
   end
@@ -76,7 +81,9 @@ class LcdNumRow
     
     checksum = 0
     @lcdnums.each do |lcdnum|
-      checksum += lcdnum.to_fixnum
+      fixnum = lcdnum.to_fixnum
+      return false if fixnum < 0
+      checksum += fixnum
     end
     return (checksum.modulo(11)==0)
     

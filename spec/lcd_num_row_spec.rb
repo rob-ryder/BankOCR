@@ -55,6 +55,13 @@ describe LcdNumRow do
       }
   ]
 
+  valid_broken_row_string = '123?56789'
+  valid_broken_row_hash = {
+      :top    => '    _  _     _  _  _  _  _ ',
+      :middle => '  | _| _||_||_ |_   ||_||_|',
+      :bottom => '  ||_  _|| | _||_|  ||_| _|'
+  }
+
 
   describe '.valid_hash?' do
 
@@ -68,6 +75,10 @@ describe LcdNumRow do
 
     it 'returns true when given a hash of @valid_row_hash' do
       expect(described_class.valid_hash?(valid_row_hash)).to be true
+    end
+
+    it 'returns true when given a hash of @valid_broken_row_hash' do
+      expect(described_class.valid_hash?(valid_broken_row_hash)).to be true
     end
 
   end
@@ -97,6 +108,11 @@ describe LcdNumRow do
       expect(return_val).to be_an_instance_of(Array)
       expect(return_val).to eql(valid_array_of_num_hashes)
     end
+
+    it 'returns array when given a hash of @valid_broken_row_hash' do
+      return_val = described_class.split_row_hash_into_num_hashes(valid_broken_row_hash)
+      expect(return_val).to be_an_instance_of(Array)
+    end
     
   end
   
@@ -123,6 +139,10 @@ describe LcdNumRow do
       expect(described_class.new(valid_row_string)).to be_an_instance_of(described_class)
     end
 
+    it "returns a #{described_class} object when given a hash of @valid_broken_row_hash" do
+      expect(described_class.new(valid_broken_row_hash)).to be_an_instance_of(described_class)
+    end
+
   end
   
   
@@ -140,6 +160,11 @@ describe LcdNumRow do
 
     it 'returns false for object initialized with "930000000" (sum of digits is NOT multiple of 11)' do
       obj = described_class.new('930000000')
+      expect(obj.is_valid_account_num?).to be false
+    end
+
+    it 'returns false for object initialized with @valid_broken_row_hash (contains illegible character(s))' do
+      obj = described_class.new(valid_broken_row_hash)
       expect(obj.is_valid_account_num?).to be false
     end
 
@@ -179,6 +204,24 @@ describe LcdNumRow do
   context 'an object initialized with a string of @valid_row_string' do
     it_behaves_like 'a lcd_num_row converter' do
       let(:obj){described_class.new(valid_row_string)}
+    end
+  end
+
+  context 'an object initialized with a hash of @valid_broken_row_hash' do
+    let(:obj){described_class.new(valid_broken_row_hash)}
+    describe '#to_s' do
+      it 'returns a string of value @valid_broken_row_string' do
+        return_val = obj.to_s
+        expect(return_val).to be_an_instance_of(String)
+        expect(return_val).to eql(valid_broken_row_string)
+      end
+    end
+    describe '#to_hash' do
+      it 'returns a hash of value @valid_broken_row_hash' do
+        return_val = obj.to_hash
+        expect(return_val).to be_an_instance_of(Hash)
+        expect(return_val).to eql(valid_broken_row_hash)
+      end
     end
   end
 

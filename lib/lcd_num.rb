@@ -33,6 +33,7 @@ class LcdNum
   #---object_methods---
   
   def initialize(value=0)
+    @signature_map = self.class.signature_map
     @signature = nil
     if(self.class.valid_fixnum?(value))
       initialize_from_fixnum(value)
@@ -44,7 +45,11 @@ class LcdNum
   end
   
   def to_fixnum
-    return self.class.signature_map[@signature]
+    if @signature_map[@signature]=='?' then
+      return -1
+    else
+      return @signature_map[@signature]
+    end
   end
   
   def to_hash
@@ -61,7 +66,7 @@ class LcdNum
   #---private_object_methods---
   
   def initialize_from_fixnum(init_num)
-    self.class.signature_map.each do |sig,map_num|
+    @signature_map.each do |sig,map_num|
       @signature=sig if init_num==map_num
     end
     raise 'Invalid fixnum, no signature matched' if @signature==nil
@@ -69,10 +74,11 @@ class LcdNum
   
   def initialize_from_hash(hash)
     expected_sig = (hash[:top]+hash[:middle]+hash[:bottom]).to_sym
-    if self.class.signature_map.has_key?(expected_sig)
+    if @signature_map.has_key?(expected_sig)
       @signature = expected_sig
     else
-      raise 'Invalid hash, no signature matched'
+      @signature_map[expected_sig] = '?'
+      @signature = expected_sig
     end
   end
   
