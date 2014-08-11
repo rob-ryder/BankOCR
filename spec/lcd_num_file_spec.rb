@@ -3,7 +3,7 @@ describe LcdNumFile do
   
   invalid_lcd_file = File.new(BASEDIR+'/scans/example2.txt')
   valid_lcd_file = File.new(BASEDIR+'/scans/example1.txt')
-  valid_lcd_string = "123456789 ERR\n678902345\n603?58912 ILL\n"
+  valid_lcd_string = "123456789 ERR\n678902345 ERR\n603?58912 ILL\n910000000\n"
   
   
   describe '.valid_file?' do

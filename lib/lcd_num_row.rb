@@ -80,10 +80,12 @@ class LcdNumRow
   def is_valid_account_num?
     
     checksum = 0
+    multiplier = 1
     @lcdnums.each do |lcdnum|
       fixnum = lcdnum.to_fixnum
       return false if fixnum < 0
-      checksum += fixnum
+      checksum += (fixnum * multiplier)
+      multiplier += 1
     end
     return (checksum.modulo(11)==0)
     
