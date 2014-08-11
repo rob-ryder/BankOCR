@@ -2,7 +2,6 @@ describe LcdNum do
 
   
   valid_test_fixnum = 0
-  valid_test_object = described_class.new(valid_test_fixnum)
   valid_test_hash   = {
       :top    => ' _ ',
       :middle => '| |',
@@ -13,6 +12,7 @@ describe LcdNum do
       :middle => '| |',
       :bottom => '|_|'
   }
+  expected_corrections = [0]
   
   
   describe '.valid_fixnum?' do
@@ -89,7 +89,7 @@ describe LcdNum do
   describe '#to_fixnum' do
     
     it 'returns a fixnum' do
-      expect(valid_test_object.to_fixnum).to be_an_instance_of(Fixnum)
+      expect(described_class.new(valid_test_fixnum).to_fixnum).to be_an_instance_of(Fixnum)
     end
     
     it "returns #{valid_test_fixnum} when sent to an object initialized with #{valid_test_fixnum}" do
@@ -108,7 +108,7 @@ describe LcdNum do
   describe '#to_hash' do
 
     it 'returns a hash' do
-      expect(valid_test_object.to_hash).to be_an_instance_of(Hash)
+      expect(described_class.new(valid_test_fixnum).to_hash).to be_an_instance_of(Hash)
     end
 
     it "returns #{valid_test_hash} when sent to an object initialized with #{valid_test_hash}" do
@@ -121,6 +121,21 @@ describe LcdNum do
       expect(instance.to_hash).to eql(valid_broken_hash)
     end
 
+  end
+  
+  
+  describe '#corrections' do
+    
+    return_val = described_class.new(valid_broken_hash).corrections
+    
+    it 'returns an array' do
+      expect(return_val).to be_an_instance_of(Array)
+    end
+    
+    it 'returns @expected_corrections for @valid_broken_hash' do
+      expect(return_val).to eql(expected_corrections)
+    end
+    
   end
 
 

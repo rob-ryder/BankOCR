@@ -61,6 +61,21 @@ class LcdNum
     }
   end
   
+  def corrections
+    matches = []
+    pos = 0
+    @signature.to_s.each_char do |char|
+      if char==' ' then
+        matches << valid_signature_value(substitute_signature_char(pos,'_'))
+        matches << valid_signature_value(substitute_signature_char(pos,'|'))
+      else
+        matches << valid_signature_value(substitute_signature_char(pos,' '))
+      end
+      pos += 1
+    end
+    return matches.compact
+  end
+  
   private
 
   #---private_object_methods---
@@ -80,6 +95,19 @@ class LcdNum
       @signature_map[expected_sig] = '?'
       @signature = expected_sig
     end
+  end
+  
+  def substitute_signature_char(pos,replacement)
+    sig = @signature.to_s
+    sig[pos] = replacement
+    return sig.to_sym
+  end
+  
+  def valid_signature_value(sig)
+    if @signature_map.has_key?(sig) && @signature_map[sig]!='?' then
+      return @signature_map[sig]
+    end
+    return nil
   end
   
 end
