@@ -126,12 +126,12 @@ describe LcdNumRow do
       expect(described_class.valid_account_num?('123?_!789')).to be false
     end
 
-    it 'returns false for invalid account number "920000000"' do
-      expect(described_class.valid_account_num?('920000000')).to be false
+    it 'returns false for invalid account number "000000029"' do
+      expect(described_class.valid_account_num?('000000029')).to be false
     end
     
-    it 'returns true for valid account number "910000000"' do
-      expect(described_class.valid_account_num?('910000000')).to be true
+    it 'returns true for valid account number "000000019"' do
+      expect(described_class.valid_account_num?('000000019')).to be true
     end
     
   end
@@ -168,18 +168,18 @@ describe LcdNumRow do
   
   describe '#is_valid_account_num?' do
 
-    it 'returns false for object initialized with "920000000" (invalid checksum)' do
-      obj = described_class.new('920000000')
+    it 'returns false for object initialized with "0000029" (invalid checksum)' do
+      obj = described_class.new('000000029')
       expect(obj.is_valid_account_num?).to be false
     end
 
-    it 'returns true for object initialized with "910000000" (valid checksum)' do
-      obj = described_class.new('910000000')
+    it 'returns true for object initialized with "000000019" (valid checksum)' do
+      obj = described_class.new('000000019')
       expect(obj.is_valid_account_num?).to be true
     end
 
-    it 'returns false for object initialized with "930000000" (invalid checksum)' do
-      obj = described_class.new('930000000')
+    it 'returns false for object initialized with "000000039" (invalid checksum)' do
+      obj = described_class.new('000000039')
       expect(obj.is_valid_account_num?).to be false
     end
 
@@ -198,16 +198,16 @@ describe LcdNumRow do
     end
     
     it 'returns an empty array if the row is already a valid account number' do
-      expect(described_class.new('910000000').corrections).to eql([])
+      expect(described_class.new('000000019').corrections).to eql([])
     end
     
     it 'returns appropriate single correction for the lightly broken initialization variable given' do
       obj = described_class.new({
-          :top    => ' _     _  _  _  _  _  _  _ ',
-          :middle => '|_|   | || || || || || || |',
-          :bottom => ' _|  ||_||_||_||_||_||_||_|'
+          :top    => ' _  _  _  _  _  _  _     _ ',
+          :middle => '| || || || || || || |   |_|',
+          :bottom => '|_||_||_||_||_||_||_|  | _|'
       })
-      expect(obj.corrections).to eql(['910000000'])
+      expect(obj.corrections).to eql(['000000019'])
     end
     
     it 'returns an empty array for the heavily broken initialization variable given' do
@@ -221,9 +221,9 @@ describe LcdNumRow do
     
     it 'returns an array with a number of entries for the non-broken initialization variable given' do
       obj = described_class.new({
-          :top    => ' _     _  _  _  _  _  _  _ ',
-          :middle => '| |  || || || || || || || |',
-          :bottom => '|_|  ||_||_||_||_||_||_||_|'
+          :top    => ' _  _  _  _  _  _  _  _  _ ',
+          :middle => '|_ |_ |_ |_ |_ |_ |_ |_ |_ ',
+          :bottom => ' _| _| _| _| _| _| _| _| _|'
       })
       expect(obj.corrections.length).to be > 1
     end

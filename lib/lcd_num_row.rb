@@ -21,7 +21,7 @@ class LcdNumRow
     return false unless self.valid_string?(num_string)
     checksum = 0
     multiplier = 1
-    num_string.each_char do |num|
+    num_string.reverse.each_char do |num|
       checksum += (num.to_i * multiplier)
       multiplier += 1
     end
@@ -135,9 +135,6 @@ class LcdNumRow
     @lcdnums.each_with_index do |lcdnum,index|
       candidates = []
       fixnum = lcdnum.to_fixnum
-      if fixnum >= 0 then
-        candidates << fixnum
-      end
       if( mode==:all_digits || fixnum<0 ) then
         candidates += lcdnum.corrections
       end
@@ -148,25 +145,12 @@ class LcdNumRow
   
   def corrections_rows(digit_candidates)
     possible_rows = []
-    digit_candidates[0].each do |pos0|
-      digit_candidates[1].each do |pos1|
-        digit_candidates[2].each do |pos2|
-          digit_candidates[3].each do |pos3|
-            digit_candidates[4].each do |pos4|
-              digit_candidates[5].each do |pos5|
-                digit_candidates[6].each do |pos6|
-                  digit_candidates[7].each do |pos7|
-                    digit_candidates[8].each do |pos8|
-                      candidate = pos0.to_s + pos1.to_s + pos2.to_s + pos3.to_s + pos4.to_s + pos5.to_s + pos6.to_s + pos7.to_s + pos8.to_s
-                      if self.class.valid_account_num?(candidate) then
-                        possible_rows << candidate
-                      end
-                    end
-                  end
-                end
-              end
-            end
-          end
+    9.times do |i|
+      digit_candidates[i].each do |replacement|
+        test_str = self.to_s
+        test_str[i] = replacement.to_s
+        if self.class.valid_account_num?(test_str) then
+          possible_rows << test_str
         end
       end
     end

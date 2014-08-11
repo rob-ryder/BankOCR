@@ -36,12 +36,17 @@ class LcdNumFile
   def convert
     string = ''
     @lcd_rows.each do |lcd_row|
-      lcd_row_str = lcd_row.to_s
-      string << lcd_row_str
-      if lcd_row_str.match(/\?+/) then
-        string << ' ILL'
-      elsif !lcd_row.is_valid_account_num? then
-        string << ' ERR'
+      if lcd_row.is_valid_account_num? then
+        string << lcd_row.to_s
+      else
+        corrections = lcd_row.corrections
+        if corrections.empty? then
+          string << lcd_row.to_s + ' ILL'
+        elsif corrections.length == 1 then
+          string << corrections[0]
+        else
+          string << lcd_row.to_s + ' AMB '+corrections.to_s
+        end
       end
       string << "\n"
     end
