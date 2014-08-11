@@ -16,6 +16,17 @@ class LcdNumRow
     return false unless (string.is_a?(String) && string.match(/^[0-9]{9}\n*$/))
     return true
   end
+  
+  def self.valid_account_num?(num_string)
+    return false unless self.valid_string?(num_string)
+    checksum = 0
+    multiplier = 1
+    num_string.each_char do |num|
+      checksum += (num.to_i * multiplier)
+      multiplier += 1
+    end
+    return (checksum.modulo(11)==0)
+  end
 
   def self.split_row_hash_into_num_hashes(row_hash)
     num_hashes = []
@@ -78,16 +89,25 @@ class LcdNumRow
   end
   
   def is_valid_account_num?
+    return self.class.valid_account_num?(self.to_s)
+  end
+  
+  def corrections
+
+    #send back empty array if this row is a valid account number already
+    return [] if is_valid_account_num?
     
-    checksum = 0
-    multiplier = 1
-    @lcdnums.each do |lcdnum|
-      fixnum = lcdnum.to_fixnum
-      return false if fixnum < 0
-      checksum += (fixnum * multiplier)
-      multiplier += 1
+    #calculate valid rows by replacing broken digits only
+    valid_rows = corrections_rows(corrections_digit_candidates(:broken_digits_only))
+
+    #if fixing these broken digits hasn't produced a valid set,
+    # attempt to modify every digit to find a valid set
+    if valid_rows.empty? then
+      valid_rows = corrections_rows(corrections_digit_candidates(:all_digits))
     end
-    return (checksum.modulo(11)==0)
+    
+    #return valid rows
+    return valid_rows
     
   end
   
@@ -108,6 +128,49 @@ class LcdNumRow
     num_hashes.each do |num_hash|
       @lcdnums << lcdNumClass.new(num_hash)
     end
+  end
+  
+  def corrections_digit_candidates(mode = :all_digits)
+    row_num_candidates = {0=>[], 1=>[], 2=>[], 3=>[], 4=>[], 5=>[], 6=>[], 7=>[], 8=>[]}
+    @lcdnums.each_with_index do |lcdnum,index|
+      candidates = []
+      fixnum = lcdnum.to_fixnum
+      if fixnum >= 0 then
+        candidates << fixnum
+      end
+      if( mode==:all_digits || fixnum<0 ) then
+        candidates += lcdnum.corrections
+      end
+      row_num_candidates[index] = candidates.compact
+    end
+    return row_num_candidates
+  end
+  
+  def corrections_rows(digit_candidates)
+    possible_rows = []
+    digit_candidates[0].each do |pos0|
+      digit_candidates[1].each do |pos1|
+        digit_candidates[2].each do |pos2|
+          digit_candidates[3].each do |pos3|
+            digit_candidates[4].each do |pos4|
+              digit_candidates[5].each do |pos5|
+                digit_candidates[6].each do |pos6|
+                  digit_candidates[7].each do |pos7|
+                    digit_candidates[8].each do |pos8|
+                      candidate = pos0.to_s + pos1.to_s + pos2.to_s + pos3.to_s + pos4.to_s + pos5.to_s + pos6.to_s + pos7.to_s + pos8.to_s
+                      if self.class.valid_account_num?(candidate) then
+                        possible_rows << candidate
+                      end
+                    end
+                  end
+                end
+              end
+            end
+          end
+        end
+      end
+    end
+    return possible_rows
   end
   
 end

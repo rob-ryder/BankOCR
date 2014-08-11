@@ -116,6 +116,26 @@ describe LcdNumRow do
     
   end
   
+  describe '.valid_account_num?' do
+    
+    it 'accepts a string' do
+      expect{described_class.valid_account_num?('')}.not_to raise_error
+    end
+    
+    it 'returns false for non-numeric string "123?_!789"' do
+      expect(described_class.valid_account_num?('123?_!789')).to be false
+    end
+
+    it 'returns false for invalid account number "920000000"' do
+      expect(described_class.valid_account_num?('920000000')).to be false
+    end
+    
+    it 'returns true for valid account number "910000000"' do
+      expect(described_class.valid_account_num?('910000000')).to be true
+    end
+    
+  end
+  
   
   describe '#initialize' do
 
@@ -168,6 +188,46 @@ describe LcdNumRow do
       expect(obj.is_valid_account_num?).to be false
     end
 
+  end
+  
+  
+  describe "#corrections" do
+
+    it 'returns an array' do
+      expect(described_class.new('123456789').corrections).to be_an_instance_of(Array)
+    end
+    
+    it 'returns an empty array if the row is already a valid account number' do
+      expect(described_class.new('910000000').corrections).to eql([])
+    end
+    
+    it 'returns appropriate single correction for the lightly broken initialization variable given' do
+      obj = described_class.new({
+          :top    => ' _     _  _  _  _  _  _  _ ',
+          :middle => '|_|   | || || || || || || |',
+          :bottom => ' _|  ||_||_||_||_||_||_||_|'
+      })
+      expect(obj.corrections).to eql(['910000000'])
+    end
+    
+    it 'returns an empty array for the heavily broken initialization variable given' do
+      obj = described_class.new({
+          :top    => ' _     _  _  _     _  _  _ ',
+          :middle => '  |   | |   |_||  |    || |',
+          :bottom => ' _|  ||_||_||_||_||_||_|| |'
+      })
+      expect(obj.corrections).to eql([])
+    end
+    
+    it 'returns an array with a number of entries for the non-broken initialization variable given' do
+      obj = described_class.new({
+          :top    => ' _     _  _  _  _  _  _  _ ',
+          :middle => '| |  || || || || || || || |',
+          :bottom => '|_|  ||_||_||_||_||_||_||_|'
+      })
+      expect(obj.corrections.length).to be > 1
+    end
+    
   end
   
   
